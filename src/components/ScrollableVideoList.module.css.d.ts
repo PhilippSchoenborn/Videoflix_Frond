@@ -1,0 +1,34 @@
+declare const styles: {
+  readonly scrollableVideoList: string;
+  readonly videoList: string;
+  readonly titleSection: string;
+  readonly title: string;
+  readonly description: string;
+  readonly scrollContainer: string;
+  readonly scrollWrapper: string;
+  readonly scrollButton: string;
+  readonly scrollButtonLeft: string;
+  readonly scrollButtonRight: string;
+  readonly scrollLeft: string;
+  readonly scrollRight: string;
+  readonly videoContainer: string;
+  readonly videoGrid: string;
+  readonly videoItem: string;
+  readonly videoThumbnail: string;
+  readonly thumbnailContainer: string;
+  readonly thumbnail: string;
+  readonly thumbnailImage: string;
+  readonly placeholderThumbnail: string;
+  readonly videoOverlay: string;
+  readonly playButton: string;
+  readonly playIcon: string;
+  readonly videoInfo: string;
+  readonly videoTitle: string;
+  readonly videoDescription: string;
+  readonly progressBar: string;
+  readonly progressFill: string;
+  readonly resumeButton: string;
+  readonly progressText: string;
+};
+
+export default styles;
