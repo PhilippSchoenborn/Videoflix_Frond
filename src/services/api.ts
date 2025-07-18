@@ -272,8 +272,8 @@ class ApiService {
 
   // Email Verification Method
   async verifyEmail(token: string): Promise<{ message: string }> {
-    // Adjust the endpoint if your backend uses a different path
-    const response = await this.api.get(`/verify-email/${token}/`);
+    // Fixed: Added /api/ prefix to match backend endpoint
+    const response = await this.api.get(`/api/verify-email/${token}/`);
     return response.data;
   }
 

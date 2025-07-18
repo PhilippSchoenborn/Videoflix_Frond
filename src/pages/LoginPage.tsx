@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFormValidation, LOGIN_VALIDATION_CONFIG } from '../hooks/useFormValidation';
 import { useToastContext } from '../context/ToastContext';
@@ -19,11 +19,54 @@ export default function LoginPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState('');
+  const processedVerificationUrlRef = useRef<string>('');
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { showToast } = useToastContext();
   const { validationState, validateField, validateForm, clearAllErrors } = useFormValidation(LOGIN_VALIDATION_CONFIG);
+
+  // Handle email verification status from URL parameters
+  useEffect(() => {
+    const currentUrl = location.search;
+    
+    // Prevent showing verification message multiple times by checking if this exact URL was already processed
+    if (processedVerificationUrlRef.current === currentUrl && currentUrl) {
+      return;
+    }
+
+    const urlParams = new URLSearchParams(location.search);
+    const verificationStatus = urlParams.get('verification');
+    const email = urlParams.get('email');
+
+    if (verificationStatus) {
+      switch (verificationStatus) {
+        case 'success':
+          showToast(`Email verification successful! You can now log in.`, 'success');
+          // Pre-fill email field if provided
+          if (email) {
+            setFormData(prev => ({ ...prev, email: email }));
+          }
+          break;
+        case 'expired':
+          showToast('Email verification link has expired. Please request a new verification email.', 'error');
+          break;
+        case 'invalid':
+          showToast('Invalid verification link. Please check your email or request a new verification email.', 'error');
+          break;
+        default:
+          break;
+      }
+      
+      // Mark that this URL has been processed - using ref for immediate update
+      processedVerificationUrlRef.current = currentUrl;
+      
+      // Clean up URL parameters after showing message
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  }, [location.search, showToast]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
