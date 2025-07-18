@@ -195,3 +195,22 @@ export const REGISTER_VALIDATION_CONFIG: FieldConfig = {
     errorMessage: 'Passwords do not match.'
   }
 };
+
+// Password reset validation config
+export const PASSWORD_RESET_VALIDATION_CONFIG: FieldConfig = {
+  password: {
+    rules: {
+      required: true,
+      minLength: 8,
+      pattern: STRONG_PASSWORD_PATTERN
+    },
+    errorMessage: 'Password must be at least 8 characters long and contain at least one letter and one number.'
+  },
+  confirmPassword: {
+    rules: {
+      required: true,
+      customValidation: () => true // Will be handled in validateField for password matching
+    },
+    errorMessage: 'Passwords do not match.'
+  }
+};

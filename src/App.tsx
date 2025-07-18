@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import PasswordPage from './pages/PasswordPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import PasswordResetPage from './pages/PasswordResetPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import Dashboard from './pages/Dashboard';
 import Impressum from './pages/Impressum';
@@ -80,6 +81,14 @@ function App() {
                 element={
                   <PublicRoute>
                     <ForgotPasswordPage />
+                  </PublicRoute>
+                } 
+              />
+              <Route 
+                path="/password-reset/:token" 
+                element={
+                  <PublicRoute>
+                    <PasswordResetPage />
                   </PublicRoute>
                 } 
               />

@@ -24,10 +24,27 @@ export default function ForgotPasswordPage() {
 
     setIsLoading(true);
     try {
-      // TODO: Implement password reset API call
-      // await api.requestPasswordReset({ email });
-      setMessage('If an account with this email exists, you will receive a password reset link.');
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URL not configured');
+      }
+
+      const response = await fetch(`${apiUrl}/api/password_reset/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      if (response.ok) {
+        setMessage('If an account with this email exists, you will receive a password reset link.');
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Failed to send reset email');
+      }
     } catch (err) {
+      console.error('Password reset request failed:', err);
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setIsLoading(false);
