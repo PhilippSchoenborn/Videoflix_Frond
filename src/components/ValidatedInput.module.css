@@ -8,6 +8,14 @@
   padding: 16px;
   gap: 16px;
   transition: border-color 0.3s ease;
+  margin-bottom: 40px; /* Increased space for error message and better spacing */
+  width: 100%; /* Use full width of container */
+  box-sizing: border-box;
+}
+
+/* Remove margin from last input in a group */
+.inputRow:last-child {
+  margin-bottom: 0;
 }
 
 .inputRow:focus-within,
@@ -80,6 +88,7 @@
   .inputRow {
     padding: 14px;
     gap: 12px;
+    margin-bottom: 28px; /* Slightly less on mobile but still good spacing */
   }
   
   .inputField {
@@ -101,6 +110,7 @@
   .inputRow {
     padding: 12px;
     gap: 10px;
+    margin-bottom: 24px; /* Good spacing even on small screens */
   }
   
   .inputField {
@@ -134,6 +144,11 @@
   position: relative;
   gap: 16px;
   transition: border-color 0.3s ease;
+  margin-bottom: 32px; /* Increased space for error message */
+}
+
+.inputRowLanding:last-child {
+  margin-bottom: 0;
 }
 
 .inputRowLanding:focus-within {

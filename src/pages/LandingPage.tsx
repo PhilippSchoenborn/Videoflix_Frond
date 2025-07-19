@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useFormValidation, LOGIN_VALIDATION_CONFIG } from '../hooks/useFormValidation';
+import { useToastContext } from '../context/ToastContext';
 import styles from './LandingPage.module.css';
 import Button from '../components/Button';
 import ValidatedInput from '../components/ValidatedInput';
@@ -11,7 +13,11 @@ import mailSvg from '../assets/mail.svg';
 
 const LandingPage: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
   const navigate = useNavigate();
+  const { checkEmailExists } = useAuth();
+  const { showToast } = useToastContext();
   const { validationState, validateField } = useFormValidation(LOGIN_VALIDATION_CONFIG);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,17 +28,39 @@ const LandingPage: React.FC = () => {
     validateField('email', e.target.value);
   };
 
-  const handleSignIn = () => {
-    if (email && !validationState.email?.hasError) {
-      // Store email and navigate to password page
-      localStorage.setItem('email', email);
-      navigate('/password', { state: { email } });
-    } else if (email) {
+  const handleSignIn = async () => {
+    // First validate email format
+    if (!email) {
+      showToast('Please enter an email address', 'error');
+      return;
+    }
+    
+    if (validationState.email?.hasError) {
       // Email has validation error, validate it to show error
       validateField('email', email);
-    } else {
-      // No email entered, go to normal login page
-      navigate('/login');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Check if email exists in the system
+      const response = await checkEmailExists(email);
+      
+      // Store email for next page
+      localStorage.setItem('email', email);
+      
+      if (response.exists) {
+        // User exists, redirect to password page (login flow)
+        navigate('/password', { state: { email } });
+      } else {
+        // User does not exist, redirect to registration page
+        navigate('/register');
+      }
+    } catch (error: any) {
+      console.error('Error checking email:', error);
+      showToast('An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,8 +103,9 @@ const LandingPage: React.FC = () => {
                   variant="small" 
                   onClick={handleSignIn}
                   type="button"
+                  disabled={isLoading}
                 >
-                  Sign In
+                  {isLoading ? 'Checking...' : 'Sign In'}
                 </Button>
               </div>
             </div>

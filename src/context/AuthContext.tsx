@@ -11,6 +11,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   updateUser: (userData: Partial<User>) => void;
+  checkEmailExists: (email: string) => Promise<{ exists: boolean; email: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -86,6 +87,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const checkEmailExists = async (email: string) => {
+    return await apiService.checkEmailExists(email);
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated,
@@ -94,6 +99,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     updateUser,
+    checkEmailExists,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -121,6 +121,11 @@ class ApiService {
     return response.data;
   }
 
+  async checkEmailExists(email: string): Promise<{ exists: boolean; email: string }> {
+    const response = await this.api.post('/check-email/', { email });
+    return response.data;
+  }
+
   async getUserProfile(): Promise<User> {
     const response = await this.api.get<User>('/profile/');
     return response.data;

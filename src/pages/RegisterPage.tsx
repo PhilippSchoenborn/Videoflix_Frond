@@ -150,7 +150,7 @@ export default function RegisterPage() {
         <div className={styles.body}>
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formBox}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center', justifyContent: 'center' }}>
+              <div className={styles.formContainer}>
                 {/* Register Title */}
                 <h1 className={styles.title}>Get Started</h1>
                 

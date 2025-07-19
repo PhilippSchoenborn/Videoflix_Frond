@@ -78,11 +78,13 @@ export default function ValidatedInput({
           onClick={() => setShowPassword(!showPassword)}
         />
       )}
-      <ErrorMessage 
-        message={errorMessage}
-        isVisible={hasError}
-        className={styles.errorContainer}
-      />
+      {hasError && errorMessage && (
+        <ErrorMessage 
+          message={errorMessage}
+          isVisible={hasError}
+          className={styles.errorContainer}
+        />
+      )}
     </div>
   );
 }

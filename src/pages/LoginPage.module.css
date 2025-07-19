@@ -125,7 +125,7 @@
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 0px; /* Removed gap since inputs now have margin-bottom */
   width: 100%;
 }
 
