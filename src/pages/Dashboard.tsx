@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useToast } from '../hooks/useToast';
 import VideoGrid from '../components/VideoGrid';
 import SearchBar from '../components/SearchBar';
 import VideoDetailModal from '../components/VideoDetailModal';
 import VideoPlayer from '../components/VideoPlayerNew';
+import Header from '../components/Header';
 import type { Video, SearchFilters, Genre, WatchProgress, GenreWithVideos } from '../types';
 import apiService from '../services/api';
 import { Play, Clock, Star, TrendingUp, Video as VideoIcon, VolumeX, Volume2 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
   const { showToast } = useToast();
   
   // State
@@ -196,15 +195,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Logout failed:', error);
-      showToast('Logout failed', 'error');
-    }
-  };
-
   // Function to refresh continue watching data
   const refreshContinueWatching = async () => {
     try {
@@ -262,27 +252,10 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Header */}
-      <header className="bg-gray-900/90 backdrop-blur-sm shadow-lg border-b border-gray-800 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-purple-500">Videoflix</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-300">
-                Welcome, {user?.first_name || user?.username}!
-              </span>
-              <button
-                onClick={handleLogout}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header - positioned over background */}
+      <div className="absolute top-0 left-0 right-0 z-20">
+        <Header />
+      </div>
 
       {/* Hero Content - positioned over background */}
       {currentHeroVideo && (
@@ -338,7 +311,7 @@ const Dashboard: React.FC = () => {
       )}
 
       {/* Main Content - positioned above background */}
-      <main className="relative z-10 bg-gradient-to-b from-transparent to-black pt-8">
+      <main className="relative z-10 bg-gradient-to-b from-transparent to-black pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Search and Filters - Better positioned */}
           <div className="mb-8">
