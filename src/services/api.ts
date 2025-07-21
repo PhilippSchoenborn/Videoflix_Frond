@@ -277,8 +277,8 @@ class ApiService {
 
   // Email Verification Method
   async verifyEmail(token: string): Promise<{ message: string }> {
-    // Fixed: Added /api/ prefix to match backend endpoint
-    const response = await this.api.get(`/api/verify-email/${token}/`);
+    // Fixed: Removed duplicate /api/ prefix since baseURL already includes /api
+    const response = await this.api.get(`/verify-email/${token}/`);
     return response.data;
   }
 

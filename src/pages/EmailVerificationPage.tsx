@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useToastContext } from '../context/ToastContext';
 import { apiService } from '../services/api';
@@ -10,6 +10,7 @@ import logoSvg from '../assets/Logo.svg';
 export default function EmailVerificationPage() {
   const [verificationStatus, setVerificationStatus] = useState<'processing' | 'success' | 'error'>('processing');
   const [message, setMessage] = useState('');
+  const hasVerifiedRef = useRef(false); // Use ref to prevent React StrictMode double execution
 
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
@@ -22,6 +23,13 @@ export default function EmailVerificationPage() {
         setMessage('Invalid verification link');
         return;
       }
+
+      // Prevent duplicate API calls using ref (survives React StrictMode)
+      if (hasVerifiedRef.current) {
+        return;
+      }
+
+      hasVerifiedRef.current = true;
 
       try {
         await apiService.verifyEmail(token);
