@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToastContext } from '../context/ToastContext';
 import mailSvg from '../assets/mail.svg';
 import styles from './ForgotPasswordPage.module.css';
 import Button from '../components/Button';
@@ -9,13 +10,12 @@ import BackgroundImage from '../components/BackgroundImage';
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const { showToast } = useToastContext();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setMessage('');
 
     if (!email) {
       setError('Please enter your email address');
@@ -38,14 +38,18 @@ export default function ForgotPasswordPage() {
       });
 
       if (response.ok) {
-        setMessage('If an account with this email exists, you will receive a password reset link.');
+        showToast('If an account with this email exists, you will receive a password reset link.', 'success');
+        setEmail(''); // Clear the email field after successful submission
       } else {
         const data = await response.json();
         setError(data.message || 'Failed to send reset email');
+        showToast(data.message || 'Failed to send reset email', 'error');
       }
     } catch (err) {
       console.error('Password reset request failed:', err);
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -60,13 +64,6 @@ export default function ForgotPasswordPage() {
         {error && (
           <div className={styles.error}>
             {error}
-          </div>
-        )}
-
-        {/* Success Message */}
-        {message && (
-          <div className={styles.success}>
-            {message}
           </div>
         )}
 
