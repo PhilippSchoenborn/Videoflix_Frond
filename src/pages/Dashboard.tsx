@@ -5,6 +5,7 @@ import SearchBar from '../components/SearchBar';
 import VideoDetailModal from '../components/VideoDetailModal';
 import VideoPlayer from '../components/VideoPlayerNew';
 import Header from '../components/Header';
+import { Link } from 'react-router-dom';
 import type { Video, SearchFilters, Genre, WatchProgress, GenreWithVideos } from '../types';
 import apiService from '../services/api';
 import { Play, Clock, Star, TrendingUp, Video as VideoIcon, VolumeX, Volume2 } from 'lucide-react';
@@ -410,6 +411,26 @@ const Dashboard: React.FC = () => {
           </section>
         </div>
       </main>
+
+      {/* Custom Dashboard Footer - Positioned on the right */}
+      <footer className="relative z-10 bg-black border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex justify-end items-center space-x-8">
+            <Link 
+              to="/datenschutz" 
+              className="text-white hover:text-purple-400 transition-colors duration-300 font-medium text-lg"
+            >
+              Datenschutz
+            </Link>
+            <Link 
+              to="/impressum" 
+              className="text-white hover:text-purple-400 transition-colors duration-300 font-medium text-lg"
+            >
+              Impressum
+            </Link>
+          </div>
+        </div>
+      </footer>
 
       {/* Video Detail Modal */}
       {selectedVideo && (
